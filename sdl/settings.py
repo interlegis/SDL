@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from unipath import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,6 +27,12 @@ SECRET_KEY = 'xtcx&l=46@wa!(4%orlx_y9rc##@c9fduodo6cp(c%7s&@_i-m'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+BASE_DIR = Path(__file__).ancestor(1)
+PROJECT_DIR = Path(__file__).ancestor(2)
+
+MEDIA_ROOT = PROJECT_DIR.child("media")
+MEDIA_URL = '/media/'
 
 
 # Application definition
@@ -56,7 +63,7 @@ ROOT_URLCONF = 'sdl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['core/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,6 +77,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'sdl.wsgi.application'
+
+FILE_UPLOAD_HANDLERS = ["django.core.files.uploadhandler.MemoryFileUploadHandler",
+                        "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
 
 # Database

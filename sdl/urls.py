@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from core.views import UploadExcelView
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^upload/$', UploadExcelView.as_view(), name='upload_excel')
 ]

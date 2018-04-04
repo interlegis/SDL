@@ -63,4 +63,7 @@ class ItemPedido(models.Model):
     pedido = models.ForeignKey(Pedido, verbose_name='Item do pedido')
 
 
+class ArquivoExcel(models.Model):
 
+    arquivo = models.FileField()
+    data_upload = models.DateTimeField(auto_now_add=True)
