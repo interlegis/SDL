@@ -1,5 +1,7 @@
 from django.db import models
 from model_utils import Choices
+from django.conf import settings
+
 
 # Create your models here.
 
@@ -16,7 +18,7 @@ class Obra(models.Model):
 
 class CampanhaDoacao(models.Model):
     data_inicio = models.DateField(verbose_name='Data Início')
-    data_fim = models.DateField(verbose_name='Data Início')
+    data_fim = models.DateField(verbose_name='Data Fim')
 
     class Meta:
         verbose_name = 'Campanha de Doação'
@@ -31,6 +33,15 @@ class CampanhaDoacao(models.Model):
 #    sigla = models.CharField(max_length=1, unique=True, verbose_name='Sigla')
 #    descricao = models.TextField(unique=True, verbose_name='Status do Pedido')
 
+class Exemplar(models.Model):
+    obra = models.ForeignKey(Obra, verbose_name='Obra', on_delete=models.PROTECT)
+    campanha = models.ForeignKey(CampanhaDoacao, verbose_name='Campanha', on_delete=models.PROTECT)
+    quantidade = models.PositiveIntegerField(verbose_name='Quantidade')
+
+    class Meta:
+        verbose_name = 'Exemplar'
+        verbose_name_plural = 'Exemplares'
+        ordering = ['quantidade']
 
 class Pedido(models.Model):
 
@@ -46,24 +57,31 @@ class Pedido(models.Model):
     data_pedido = models.DateField(verbose_name='Data Início')
 
     #    status_pedido = models.ForeignKey(StatusPedido, verbose_name='Status do Pedido')
-    status_pedido = models.CharField(max_length=1,
+    status_pedido = models.CharField(max_length=2,
                                      verbose_name='Esfera Federação',
                                      choices=STATUS_CHOICES)
 
 
 
 class ItemPedido(models.Model):
-    obra = models.ForeignKey(Obra, verbose_name='Obra')
+    exemplar = models.ForeignKey(Exemplar, verbose_name='Exemplar', on_delete=models.PROTECT)
     data_requisicao = models.DateField(verbose_name='Data Requisição')
     quantidade = models.PositiveIntegerField(verbose_name='Quantidade')
     # status = models.ForeignKey(StatusRequisicao,
     #                            on_delete=models.PROTECT,
     #                            verbose_name='Status da Requisição')
 
-    pedido = models.ForeignKey(Pedido, verbose_name='Item do pedido')
+    pedido = models.ForeignKey(Pedido, verbose_name='Item do pedido', on_delete=models.PROTECT)
 
 
 class ArquivoExcel(models.Model):
-
     arquivo = models.FileField()
     data_upload = models.DateTimeField(auto_now_add=True)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                                related_name='profile')
+    avatar_url = models.URLField(blank=True, null=True)
+    access_key = models.CharField(max_length=100,blank=False, null=False)
+    is_admin = models.BooleanField(default=False)

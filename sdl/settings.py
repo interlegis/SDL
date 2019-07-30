@@ -40,11 +40,13 @@ MEDIA_URL = '/media/'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'mozilla_django_oidc',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'oauth2_provider',
     'core',
 ]
 
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'mozilla_django_oidc.middleware.SessionRefresh',
 ]
 
 ROOT_URLCONF = 'sdl.urls'
@@ -124,6 +127,25 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# AUTHENTICATION_BACKENDS = (
+#     'core.login.MyOIDCAB',
+# )
+
+# Authentication stuffs
+OIDC_RP_CLIENT_ID = '0949df8a7aaa7fc0a0ddcc290b5a6b9227bc1993536f6afadb7676a740115765' #Local
+OIDC_RP_CLIENT_SECRET = '8f2e3a51e74c484aa8a5526d2a0b780d593f5f990ad38a33a708105fa1e6c2f4' #Local
+OIDC_OP_AUTHORIZATION_ENDPOINT = 'http://localhost:3000/oauth/authorize' #Local
+OIDC_OP_TOKEN_ENDPOINT = 'http://localhost:3000/oauth/token' #Local
+OIDC_OP_USER_ENDPOINT = 'http://localhost:3000/oauth/userinfo' #Local
+OIDC_RP_SIGN_ALGO = 'RS256' #Local
+OIDC_OP_JWKS_ENDPOINT = 'http://localhost:3000/oauth/discovery/keys' #Local
+LOGIN_REDIRECT_URL = '/upload/' #Local
+LOGOUT_REDIRECT_URL = '/upload/' #Local
+OIDC_RP_SCOPES = 'openid profile email' #Local
+OIDC_VERIFY_JWT = False #Local
+OIDC_USE_NONCE = False #Local
+
 
 
 # Static files (CSS, JavaScript, Images)
